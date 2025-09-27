@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pet Diagnosis Chatbot</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Pet Diagnosis Chatbot!</h1>
+        <div class="chatbot-container">
+            <ul id="messages" class="messages-container"></ul>
+            <div id="input-container">
+                <input type="text" id="user_message" placeholder="Type your message here...">
+                <button id="send">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Function to display bot message
+        function displayBotMessage(message) {
+            const botMessageDiv = document.createElement("li");
+            botMessageDiv.className = "message bot-message";
+            botMessageDiv.innerHTML = `<div class="text_wrapper">${message}</div>`;
+            document.getElementById("messages").appendChild(botMessageDiv);
+
+            // Scroll to the bottom of the messages container to keep the latest messages visible
+            const messagesDiv = document.getElementById("messages");
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        // Show initial bot message when the page loads
+        window.onload = function() {
+            displayBotMessage("Please enter the pet's name (e.g., 'dog', 'cat').");
+        };
+
+        document.getElementById("send").addEventListener("click", function() {
+            const userMessage = document.getElementById("user_message").value;
+            if (!userMessage) return;
+
+            // Display user message
+            const userMessageDiv = document.createElement("li");
+            userMessageDiv.className = "message user-message";
+            userMessageDiv.innerHTML = `<div class="text_wrapper">${userMessage}</div>`;
+            document.getElementById("messages").appendChild(userMessageDiv);
+            document.getElementById("user_message").value = ""; // Clear input
+
+            // Send AJAX request
+            fetch("/chat", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ user_message: userMessage })
+            })
+            .then(response => response.json())
+            .then(data => {
+                displayBotMessage(data.bot_response);
+            })
+            .catch(error => console.error("Error:", error));
+        });
+
+        // Optional: Allow pressing 'Enter' to submit the message
+        document.getElementById("user_message").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                document.getElementById("send").click();
+            }
+        });
+    </script>
+</body>
+</html>

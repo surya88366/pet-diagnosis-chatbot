@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Animated Rain Background</title>
+    <link rel="stylesheet" href="/static/bootstrap.min.css">
+    <style>
+        /* Rain Drop Background Animation */
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #1e3c72; /* Dark blue background */
+            overflow: hidden;
+            font-family: 'Nunito', sans-serif;
+            position: relative;
+        }
+
+        /* Raindrop styles */
+        .rain {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .rain-drop {
+            position: absolute;
+            top: -10%;
+            width: 2px;
+            height: 60px;
+            background-color: rgba(255, 255, 255, 0.5);
+            animation: fall 1s linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(120vh);
+                opacity: 0;
+            }
+        }
+
+        /* Random raindrop generation */
+        .rain-drop:nth-child(odd) {
+            animation-duration: 1.2s;
+        }
+
+        .rain-drop:nth-child(even) {
+            animation-duration: 0.8s;
+        }
+
+        /* Adding rain drops */
+        .rain .rain-drop {
+            left: calc(100% * var(--random-x));
+            animation-delay: calc(var(--random-delay) * 1s);
+        }
+
+        /* Styling for the login form */
+        .auth-container {
+            position: relative;
+            z-index: 1;
+            background-color: rgba(255, 255, 255, 0.1); /* Transparent white */
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            color: white;
+        }
+
+        .auth-container h2 {
+            margin-bottom: 30px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .auth-container .form-control {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid transparent;
+            border-radius: 30px;
+            padding: 15px;
+        }
+
+        .auth-container .form-control:focus {
+            background-color: rgba(255, 255, 255, 0.3);
+            border-color: white;
+            box-shadow: none;
+        }
+
+        .auth-container .btn {
+            background-color: #007bff;
+            border-radius: 30px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+
+        .auth-container .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .auth-container a {
+            color: #ffcc00; /* Bright yellow for better visibility */
+            text-decoration: none;
+        }
+
+        .auth-container a:hover {
+            color: #ffd700; /* Slightly lighter on hover */
+        }
+
+        .text-center {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Raindrop Animation -->
+    <div class="rain">
+        <!-- Generating random rain drops -->
+        <script>
+            for (let i = 0; i < 20; i++) {
+                const drop = document.createElement('div');
+                drop.className = 'rain-drop';
+                drop.style.setProperty('--random-x', Math.random());
+                drop.style.setProperty('--random-delay', Math.random() * 1.5);
+                document.querySelector('.rain').appendChild(drop);
+            }
+        </script>
+    </div>
+
+    <!-- Login Form -->
+    <div class="auth-container">
+        <h2>Login</h2>
+        <form action="home.html" method="post" onsubmit="return validateForm()">
+            <div class="mb-3">
+                <label for="email" class="form-label">Email address</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+        </form>
+        <p class="text-center mt-3">Don't have an account? <a href="http://127.0.0.1:5500/templates/singup.html">Sign Up</a></p>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Optional: Simple form validation before redirecting
+        function validateForm() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            if (email && password) {
+                // You can perform more validation if needed
+                return true; // Allow form submission
+            }
+            return false; // Prevent form submission if fields are empty
+        }
+    </script>
+
+</body>
+
+</html>
